@@ -20,6 +20,7 @@ $(document).ready(function () {
         }).then(function (response) {
             console.log(response);
             var temperature = Math.floor(((response.main.temp) - 273.15) * 1.80 + 32)
+            var feelsLike = Math.floor(((response.main.feels_like) - 273.15) * 1.80 + 32)
             var humidity = response.main.humidity
             var windspeed = response.wind.speed
             var cityName = response.name;
@@ -29,7 +30,8 @@ $(document).ready(function () {
             $('#cityName').html(cityName)
             $('#date').append(" " + currentDay);
             $('#temp').append(temperature + "°F"+
-            ` <img src='http://openweathermap.org/img/wn/${icon}.png' height='500px' class="img-fluid" alt="Responsive image">`);
+            ` <img src='http://openweathermap.org/img/wn/${icon}.png' height='500px' class="img-fluid" alt="Responsive image"> `);
+            $('#feelsLike').append(` Feels Like ${feelsLike}°`);
             $('.lead').append('<br>Humidity: ' + humidity + "%");
             $('.lead').append('<br>Windspeed: ' + windspeed + "MPH");
             getFiveDayForecast(lat, lon);
@@ -44,10 +46,9 @@ $(document).ready(function () {
         }).then(function (response) {
             console.log(response.daily[0].uvi);
             for (var i = 1; i < 6; i++) {
-                var nextDay = moment().add(i, 'days').format('dddd');
+                var nextDay = moment().add(i, 'days').format('ddd');
                 var cardIcon = response.daily[i].weather[0].icon
                 var cardTemp = Math.floor(((response.daily[i].temp.day) - 273.15) * 1.80 + 32);
-                var cardHumidity = response.daily[i].humidity;
 
                 $('.card-deck').append(`<div class='card'>
              <div class='card-body'>
