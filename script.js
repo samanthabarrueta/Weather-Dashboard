@@ -24,6 +24,8 @@ $(document).ready(function () {
             var humidity = response.main.humidity
             var windspeed = response.wind.speed
             var cityName = response.name;
+            var description = response.weather[0].description;
+            console.log(description)
             var icon = response.weather[0].icon
             var lat = response.coord.lat;
             var lon = response.coord.lon;
@@ -32,8 +34,9 @@ $(document).ready(function () {
             $('#temp').append(temperature + "°F"+
             ` <img src='http://openweathermap.org/img/wn/${icon}.png' height='500px' class="img-fluid" alt="Responsive image"> `);
             $('#feelsLike').append(` Feels Like ${feelsLike}°`);
+            $('#description').append(description);
             $('.lead').append('<br>Humidity: ' + humidity + "%");
-            $('.lead').append('<br>Windspeed: ' + windspeed + "MPH");
+            $('.lead').append('<br>Windspeed: ' + windspeed + "mph");
             getFiveDayForecast(lat, lon);
         })
 
@@ -44,16 +47,16 @@ $(document).ready(function () {
             url: queryURL2,
             method: "GET"
         }).then(function (response) {
-            console.log(response.daily[0].uvi);
             for (var i = 1; i < 6; i++) {
                 var nextDay = moment().add(i, 'days').format('ddd');
-                var cardIcon = response.daily[i].weather[0].icon
-                var cardTemp = Math.floor(((response.daily[i].temp.day) - 273.15) * 1.80 + 32);
+                var cardIcon = response.daily[i].weather[0].icon;
+                var cardMin = Math.floor(((response.daily[i].temp.min) - 273.15) * 1.80 + 32);
+                var cardMax = Math.floor(((response.daily[i].temp.max) - 273.15) * 1.80 + 32);
 
                 $('.card-deck').append(`<div class='card'>
              <div class='card-body'>
                  <h6 class='card-title'>${nextDay}</h6>
-                 <p class='card-text'id ="card${i}"> ${cardTemp}°F <img src='http://openweathermap.org/img/wn/${cardIcon}.png' class="img-fluid" alt="Responsive image"></p>
+                 <p class='card-text'id ="card${i}"> ${cardMin}°F | ${cardMax}°F <img src='http://openweathermap.org/img/wn/${cardIcon}.png' class="img-fluid" alt="Responsive image"></p>
              </div>`);
             }
         });
