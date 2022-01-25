@@ -1,12 +1,12 @@
 $(document).ready(function () {
-    var searchHistory = [];
-    var APIKey = "b212266a3b5800f1c727bf9539b273bb";
+    let searchHistory = [];
+    const APIKey = "b212266a3b5800f1c727bf9539b273bb";
     $('#search-button').on('click', function (event) {
         event.preventDefault();
         $(".card-deck").empty();
         $(".lead").empty();
         $(".display-4").empty();
-        var location = $('#input').val();
+        let location = $('#input').val();
         searchHistory.push(location);
         getWeatherData(location);
         localStorage.setItem('cities', JSON.stringify(searchHistory));
@@ -18,6 +18,7 @@ $(document).ready(function () {
             url: queryURL,
             method: "GET"
         }).then(function (response) {
+            console.log(response);
             var temperature = Math.floor(((response.main.temp) - 273.15) * 1.80 + 32)
             var humidity = response.main.humidity
             var windspeed = response.wind.speed
@@ -25,10 +26,10 @@ $(document).ready(function () {
             var icon = response.weather[0].icon
             var lat = response.coord.lat;
             var lon = response.coord.lon;
-            $('.display-4').html(cityName)
-            $('.display-4').append(" " + currentDay);
-            $('.display-4').append(` <img src='http://openweathermap.org/img/wn/${icon}.png' class="img-fluid" alt="Responsive image">`);
-            $('.lead').append("Temperature: " + temperature + "°F");
+            $('#cityName').html(cityName)
+            $('#date').append(" " + currentDay);
+            $('#temp').append(temperature + "°F"+
+            ` <img src='http://openweathermap.org/img/wn/${icon}.png' height='500px' class="img-fluid" alt="Responsive image">`);
             $('.lead').append('<br>Humidity: ' + humidity + "%");
             $('.lead').append('<br>Windspeed: ' + windspeed + "MPH");
             getFiveDayForecast(lat, lon);
@@ -53,16 +54,6 @@ $(document).ready(function () {
                  <h6 class='card-title'>${nextDay}</h6>
                  <p class='card-text'id ="card${i}"> <img src='http://openweathermap.org/img/wn/${cardIcon}.png' class="img-fluid" alt="Responsive image"> <br>${cardTemp}°F <br> ${cardHumidity}% </p>
              </div>`);
-            }
-            var uvi = response.daily[0].uvi
-            if (uvi > 8) {
-                $('.lead').append(`<br> <div class="text-danger"> UV index : ${uvi}</div>`)
-            }
-            else if (uvi < 8 && uvi > 5) {
-                $('.lead').append(`<br> <div class="text-warning"> UV index :   ${uvi}</div>`)
-            }
-            else {
-                $('.lead').append(`<br> <div class="text-success"> UV index :   ${uvi}</div>`)
             }
         });
     };
