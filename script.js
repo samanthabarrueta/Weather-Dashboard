@@ -44,7 +44,7 @@ $(document).ready(function () {
         }).then(function (response) {
             console.log(response.daily[0].uvi);
             for (var i = 1; i < 6; i++) {
-                var nextDay = moment().add(i, 'days').format('L');
+                var nextDay = moment().add(i, 'days').format('dddd');
                 var cardIcon = response.daily[i].weather[0].icon
                 var cardTemp = Math.floor(((response.daily[i].temp.day) - 273.15) * 1.80 + 32);
                 var cardHumidity = response.daily[i].humidity;
@@ -52,7 +52,7 @@ $(document).ready(function () {
                 $('.card-deck').append(`<div class='card'>
              <div class='card-body'>
                  <h6 class='card-title'>${nextDay}</h6>
-                 <p class='card-text'id ="card${i}"> <img src='http://openweathermap.org/img/wn/${cardIcon}.png' class="img-fluid" alt="Responsive image"> <br>${cardTemp}°F <br> ${cardHumidity}% </p>
+                 <p class='card-text'id ="card${i}"> ${cardTemp}°F <img src='http://openweathermap.org/img/wn/${cardIcon}.png' class="img-fluid" alt="Responsive image"></p>
              </div>`);
             }
         });
